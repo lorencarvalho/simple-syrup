@@ -23,10 +23,10 @@ TESTS_REQUIRE = [
 
 
 class Venv(setuptools.Command):
-    user_options = []
+    user_options = [('python=', None, 'Which interpreter to build your venv with')]
 
     def initialize_options(self):
-        """Abstract method that is required to be overwritten"""
+        self.python = ''
 
     def finalize_options(self):
         """Abstract method that is required to be overwritten"""
@@ -37,6 +37,8 @@ class Venv(setuptools.Command):
             'virtualenv',
             venv_path
         ]
+        if self.python:
+            venv_cmd.extend(['-p', self.python])
         print('Creating virtual environment in ', venv_path)
         subprocess.check_call(venv_cmd)
         print('Linking `activate` to top level of project.\n')
